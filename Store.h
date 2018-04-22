@@ -49,6 +49,7 @@ class Store
         void viewFavorites(int whoIs);
         void viewFavoritesHelper(string arr[]);
         int finderForItemQuantity(string itemName);
+        void loadOrders();
         string findObject(string itemType, int itemPos);
         Customer getCustomerAtIndex(unsigned int index);
         ~Store();

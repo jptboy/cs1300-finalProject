@@ -72,17 +72,58 @@ int Store::Split(string s, char a, string word[], int size)//split function from
 }
 Store::Store()
 {   
-    loadCustomers();
     loadDays();
+    loadOrders();
+    loadCustomers();
 };
 void Store::loadDays()
 {
-    ifstream dayloader("day.txt");
-    string dayline;
-    int convertedDayline;
-    while(getline(dayloader,dayline))
+    try
+    {   ifstream dayloader("day.txt");
+        string dayline;
+        dayloader >> dayline;
+        daysOpen=stoi(dayline);
+        return;
+    }
+    catch(...)
     {
-        daysOpen= stoi(dayline);
+        cout << "Error loading days file. Program terminated." << endl;
+        exit(0);
+    }
+}
+void Store::loadOrders()
+{
+    string orderLine;
+    string orderHolder[5];
+    int orderHolderSize=5;
+    
+    ifstream loadOrderfromFile("orders.txt");
+    if(!loadOrderfromFile.is_open())
+    {
+        cout << "Error loading orders! Program terminated!" << endl;
+        exit(0);
+    }
+    
+    try
+    {
+        while(getline(loadOrderfromFile,orderLine))
+        {
+            Split(orderLine,',',orderHolder,orderHolderSize);
+            
+            orderSchedule newOrder;
+            newOrder.dayTillOrder=stoi(orderHolder[0]);
+            newOrder.itemQuantity=stoi(orderHolder[1]);
+            newOrder.currDay=stoi(orderHolder[2]);//giving instantiated struct members values
+            newOrder.itemType=orderHolder[3];
+            newOrder.itemPos=stoi(orderHolder[4]);
+            
+            orders.push_back(newOrder);
+        }
+    }
+    catch(...)
+    {
+        cout << "Error loading orders! Program terminated!" << endl;
+        exit(0);
     }
 }
 void Store::loadCustomers()
@@ -130,15 +171,15 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
 {
     makeOrders();
     string userChoice;
-    cout << customers[whoIs].getName() << ", what would you like to do? You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (o)rder an item, (l)eave the store, (s)earch for and favorite items, view (f)avorite items, or (q)uit this system." << endl;
+    cout << customers[whoIs].getName() << ", what would you like to do? You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (l)eave the store, (s)earch for and favorite items, view (f)avorite items, or (q)uit this system." << endl;
     
     //cin.ignore();//character streams in c++ are a mystic art I guess and this fixes a problem but it also causes a problem
     getline(cin,userChoice);
     
     
-    while(!(userChoice=="b"||userChoice=="p"||userChoice=="g"||userChoice=="v"||userChoice=="o"||userChoice=="l"||userChoice=="q"||userChoice=="s" || userChoice=="f"))
+    while(!(userChoice=="b"||userChoice=="p"||userChoice=="g"||userChoice=="v"||userChoice=="l"||userChoice=="q"||userChoice=="s" || userChoice=="f"))
     {
-        cout << "Please enter a valid lowercase choice " << customers[whoIs].getName() << ". You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (o)rder an item, (l)eave the store, (s)earch for and favorite items, view (f)avorite items, or (q)uit this system." << endl;
+        cout << "Please enter a valid lowercase choice " << customers[whoIs].getName() << ". You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (l)eave the store, (s)earch for and favorite items, view (f)avorite items, or (q)uit this system." << endl;
         getline(cin,userChoice);
     }
     
@@ -158,17 +199,13 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
     {
         viewBalance(whoIs);
     }
-    else if(userChoice=="o")
-    {
-        
-    }
     else if(userChoice=="l")
     {
         leaveStore(whoIs);
     }
     else if(userChoice=="q")
     {
-        
+        quit();
     }
     else if(userChoice=="f")
     {
@@ -832,9 +869,13 @@ void Store::requestOrder()
 {
 
 }//this is used to ask the manager to order a item if you cant find it
-void Store::quit()//I might name this leaveStore
+void Store::quit()
 {
-
+    ofstream updateDays("day.txt");
+    
+    updateDays << daysOpen << endl;
+    
+    exit(0);
 }
 void Store::leaveStore(int whoIs)
 {
@@ -896,7 +937,7 @@ void Store::makeOrders()
 {
     for(int i=0; i<orders.size();i++)
     {
-        if(daysOpen==orders[i].dayTillOrder)
+        if(daysOpen>=orders[i].dayTillOrder)
         {
             if(orders[i].itemType=="food")
             {
