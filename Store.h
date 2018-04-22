@@ -15,6 +15,7 @@ class Store
         void menu(int whoIs);
         void searchUsers();
         void buyItem();
+        void searchItems(int whoIs);
         void addItemtoFavorite();
         void shopLift();
         void quit();

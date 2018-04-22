@@ -114,15 +114,15 @@ void Store::loadCustomers()
 void Store::menu(int whoIs)//a menu asking customers what they want to do
 {
     string userChoice;
-    cout << customers[whoIs].getName() << ", what would you like to do? You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (o)rder an item, (l)eave the store, or (q)uit this system." << endl;
+    cout << customers[whoIs].getName() << ", what would you like to do? You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (o)rder an item, (l)eave the store, (s)earch for an item, or (q)uit this system." << endl;
     
-    cin.ignore();
+    cin.ignore();//character streams in c++ are a mystic art I guess and this fixes a problem but it also causes a problem
     getline(cin,userChoice);
     
     
-    while(!(userChoice=="b"||userChoice=="p"||userChoice=="g"||userChoice=="v"||userChoice=="o"||userChoice=="l"||userChoice=="q"))
+    while(!(userChoice=="b"||userChoice=="p"||userChoice=="g"||userChoice=="v"||userChoice=="o"||userChoice=="l"||userChoice=="q"||userChoice=="s"))
     {
-        cout << "Please enter a valid lowercase choice " << customers[whoIs].getName() << endl << ". You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (o)rder an item, (l)eave the store, or (q)uit this system." << endl;
+        cout << "Please enter a valid lowercase choice " << customers[whoIs].getName() << ". You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (o)rder an item, (l)eave the store, (s)earch for an item, or (q)uit this system." << endl;
         getline(cin,userChoice);
     }
     
@@ -153,6 +153,10 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
     else if(userChoice=="q")
     {
         
+    }
+    else if(userChoice=="s")
+    {
+        searchItems(whoIs);
     }
     else
     {
@@ -334,7 +338,91 @@ void Store::quit()//I might name this leaveStore
 {
 
 }
-
+void Store::searchItems(int whoIs)
+{
+    bool exists;
+    string itemChoice;
+    string itemType;
+    int itemIndex=-1;
+    string returnChoice;
+    
+    cout << "Would you like to return to the (m)ain menu or would you like to (s)earch for an item?" << endl;
+    getline(cin, returnChoice);
+    
+    while(!(returnChoice=="m"||returnChoice=="s"))
+    {
+        cout << "Would you like to return to the (m)ain menu or would you like to (s)earch for an item? (Input is case-sensitive)" << endl;
+        getline(cin,returnChoice);
+    }
+    
+    if(returnChoice=="m")
+    {
+        menu(whoIs);
+    }
+    else if(returnChoice=="s")
+    {
+        cout << "Enter the name of the item you wish to search for information about:" << endl;
+        getline(cin, itemChoice);
+        
+        for(int i=0; i<storeInventory.clothes.size();i++)
+        {
+            if(itemChoice==storeInventory.clothes[i].getType())
+            {
+                exists=true;
+                itemType="clothing";
+                itemIndex=i;
+            }
+        }
+        for(int i=0; i<storeInventory.electronics.size();i++)
+        {
+            if(itemChoice==storeInventory.electronics[i].getName())
+            {
+                exists=true;
+                itemType="electronic";
+                itemIndex=i;
+            }
+        }
+        for(int i=0; i<storeInventory.foods.size();i++)
+        {
+            if(itemChoice==storeInventory.foods[i].getName())
+            {
+                exists=true;
+                itemType="food";
+                itemIndex=i;
+            }
+        }
+        if(!exists)
+        {
+            cout <<"Sorry that item does not exist in our inventory." << endl;
+        }
+        else if(exists)
+        {
+            if(itemType=="clothing")
+            {
+                cout << "There are " << storeInventory.clothes[itemIndex].getQuantity() <<" " <<storeInventory.clothes[itemIndex].getType() << "(s) available and they are all size " << storeInventory.clothes[itemIndex].getSize() << " and are " <<storeInventory.clothes[itemIndex].getColor() << "."<< endl;
+                cout << "Each " << storeInventory.clothes[itemIndex].getType() << " costs " << storeInventory.clothes[itemIndex].getPrice() <<" dollars." << endl;
+            }
+            else if(itemType=="electronic")
+            {
+                cout << "There are " << storeInventory.electronics[itemIndex].getQuantity() <<" " <<storeInventory.electronics[itemIndex].getName() << "(s) available and they are all good " << storeInventory.electronics[itemIndex].getdeviceType() << "(s) and have a " <<storeInventory.electronics[itemIndex].getWarrantyLength() << " day warranty."<< endl;
+                cout << "Each " << storeInventory.electronics[itemIndex].getName() << " costs " << storeInventory.electronics[itemIndex].getPrice() <<" dollars." << endl;
+            }
+            
+            else if(itemType=="food")
+            {
+                cout << "There are " << storeInventory.foods[itemIndex].getQuantity() <<" " <<storeInventory.foods[itemIndex].getName() << "(s) available. The place of origin of "<< storeInventory.foods[itemIndex].getName()<<"(s) is " << storeInventory.foods[itemIndex].getEthnicOrigin() << " and " << storeInventory.foods[itemIndex].getName() <<" tastes " <<storeInventory.foods[itemIndex].getTaste() << "."<< endl;
+                cout << "Each " << storeInventory.foods[itemIndex].getName() << " costs " << storeInventory.foods[itemIndex].getPrice() <<" dollars." << endl;
+            }
+            else
+            {
+                cout << "Big error in search function when displaying item information." << endl;
+                exit(0);
+            }
+        }
+        searchItems(whoIs);
+    }
+    
+}
 Customer Store::getCustomerAtIndex(unsigned int index)
 {
     return customers[index];
