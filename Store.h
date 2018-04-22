@@ -24,6 +24,7 @@ class Store
         void requestOrder();
         void viewItems(int whoIs);
         void addNewCustomer();
+        void createOrder(string itemType, int itemPos);
         bool doesItemExist(string whatItem);
         int whereDoesItemExist(string whatItem);
         Customer getCustomerAtIndex(unsigned int index);

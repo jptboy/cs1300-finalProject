@@ -342,7 +342,9 @@ void Store::buyItem(int whoIs)//self explanitory
                     }
                     else if(managerReq=="s")
                     {
-                        cout << "Feature does not exist yet" << endl;
+                        cout << "The manager ordered more quantity of the item, n_1 more will come in n days." << endl;
+                        createOrder(itemType,positionInVec);
+                        buyItem(whoIs);
                     }
                 }
                 else
@@ -381,7 +383,9 @@ void Store::buyItem(int whoIs)//self explanitory
                     }
                     else if(managerReq=="s")
                     {
-                        cout << "Feature does not exist yet" << endl;
+                        cout << "The manager ordered more quantity of the item, n_1 more will come in n days." << endl;
+                        createOrder(itemType,positionInVec);
+                        buyItem(whoIs);
                     }
                 }
                 else
@@ -419,7 +423,9 @@ void Store::buyItem(int whoIs)//self explanitory
                     }
                     else if(managerReq=="s")
                     {
-                        cout << "Feature does not exist yet" << endl;
+                        cout << "The manager ordered more quantity of the item, n_1 more will come in n days." << endl;
+                        createOrder(itemType,positionInVec);
+                        buyItem(whoIs);
                     }
                 }
                 else
@@ -522,6 +528,14 @@ void Store::requestOrder()
 void Store::quit()//I might name this leaveStore
 {
 
+}
+void Store::createOrder(string itemType, int itemPos)
+{
+    
+    if(itemType=="food")
+    {
+        
+    }
 }
 void Store::searchItems(int whoIs)
 {
