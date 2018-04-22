@@ -1,9 +1,13 @@
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 #include <vector>
 #include "Store.h"
 #include <stdlib.h>
 using namespace std;
+
+
+
 int Store::Split(string s, char a, string word[], int size)//split function from recitation 7
 {
     int ctilchar = 0;//counts the number of chars until the seperator character
@@ -108,11 +112,15 @@ void Store::loadCustomers()
     }
     cout << "Success! Customers have been loaded." << endl;
     cout << "Welcome to the store, this computerized system will aid you through searching for items, making purchases, adding money to your store account,and a variety of other things." << endl;
+    //MAKECHANGE
+    daysOpen=1;
+    //MAKECHANGE
     searchUsers();
     return;
 }
 void Store::menu(int whoIs)//a menu asking customers what they want to do
 {
+    makeOrders();
     string userChoice;
     cout << customers[whoIs].getName() << ", what would you like to do? You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (o)rder an item, (l)eave the store, (s)earch for an item, or (q)uit this system." << endl;
     
@@ -529,12 +537,80 @@ void Store::quit()//I might name this leaveStore
 {
 
 }
+void Store::setDaysOpen(int newDaysOpen)
+{
+    daysOpen=newDaysOpen;
+}
+int Store::getDaysOpen()
+{
+    return daysOpen;
+}
 void Store::createOrder(string itemType, int itemPos)
 {
     
+    int randDay=-1;
+    int lowQuantity=-1;
+    srand((int) time(0));//random number generation from 1 to 5, here we seed value to start with which is the time so that we get actual random runs
+    randDay= (rand()%5) + 1;
+    
+    Electronic possibleEl;
+    Clothing possibleCl;
+    Food possibleFd;
     if(itemType=="food")
     {
+        possibleFd=storeInventory.foods[itemPos];
+        possibleCl.~Clothing();
+        possibleEl.~Electronic();
+        lowQuantity= 5;
         
+    }
+    else if(itemType=="clothing")
+    {
+        possibleCl=storeInventory.clothes[itemPos];
+        possibleEl.~Electronic();
+        possibleFd.~Food();
+        lowQuantity=5;
+        
+    }
+    else if(itemType=="electronic")
+    {
+        possibleEl=storeInventory.electronics[itemPos];
+        possibleCl.~Clothing();
+        possibleFd.~Food();
+        lowQuantity= 5;
+        
+    }
+    
+    orderSchedule newOrder;
+    newOrder.dayTillOrder=daysOpen+randDay;
+    newOrder.currDay=daysOpen;//giving instantiated struct members values
+    newOrder.itemQuantity=lowQuantity;
+    newOrder.itemType=itemType;
+    newOrder.itemPos=itemPos;
+    
+    orders.push_back(newOrder);
+    
+}
+
+void Store::makeOrders()
+{
+    for(int i=0; i<orders.size();i++)
+    {
+        if(daysOpen==orders[i].dayTillOrder)
+        {
+            if(orders[i].itemType=="food")
+            {
+                storeInventory.foods[orders[i].itemPos].setQuantity((storeInventory.foods[orders[i].itemPos].getQuantity()+5));
+            }
+            else if(orders[i].itemType=="electronic")
+            {
+                storeInventory.electronics[orders[i].itemPos].setQuantity((storeInventory.electronics[orders[i].itemPos].getQuantity()+5));
+            }
+            else if(orders[i].itemType=="clothing")
+            {
+                storeInventory.clothes[orders[i].itemPos].setQuantity((storeInventory.clothes[orders[i].itemPos].getQuantity()+5));
+            }
+        }
     }
 }
 void Store::searchItems(int whoIs)
