@@ -26,7 +26,7 @@ class Store
         void addItemtoFavorite();
         void shopLift();
         void quit();
-        void viewBalance();
+        void viewBalance(int whoIs);
         void getReccomendations();
         void requestOrder();
         void viewItems(int whoIs);
@@ -39,6 +39,7 @@ class Store
         void makeOrders();
         void loadDays();
         void leaveStore(int whoIs);
+        
         template <class PsuedoObject>
         PsuedoObject findObject(string itemType, int itemPos)
         {

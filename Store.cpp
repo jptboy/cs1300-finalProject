@@ -122,7 +122,7 @@ void Store::loadCustomers()
         
     }
     cout << "Success! Customers have been loaded." << endl;
-    cout << "Welcome to the store, this computerized system will aid you through searching for items, making purchases, adding money to your store account,and a variety of other things." << endl;
+    cout << "Welcome to the store, this system will aid you through searching for items, making purchases, adding money to your store account,and a variety of other things." << endl;
     //MAKECHANGE
     //MAKECHANGE
     searchUsers();
@@ -158,7 +158,7 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
     }
     else if(userChoice=="v")
     {
-        
+        viewBalance(whoIs);
     }
     else if(userChoice=="o")
     {
@@ -194,9 +194,10 @@ void Store::searchUsers()//this is for the  store to search users the customer w
     string addedMoneyS;
     double addedMoney=-1;
     int indexAtFound=-1;
+    int yeller=0;
     
     
-    cout << "Please enter your first name into this system, so that we may serve you properly. Input is case-sensitive." << endl;
+    cout << "Please enter your first name into this system, so that we may serve you properly. (Input is case-sensitive)" << endl;
     cin >> enteredName;
     
     while(enteredName.length()==0)
@@ -216,7 +217,7 @@ void Store::searchUsers()//this is for the  store to search users the customer w
     if(!found)
     {
         string error="z";
-        cout << "You appear to be a new user. If this is not correct please type (n) to enter your name in again otherwise please type in (y)." << endl;
+        cout << "You appear to be a new customer. If this is not correct please type (n) to enter your name in again otherwise please type in (y)." << endl;
         cin.ignore();
         getline(cin,error);
         while(!(error=="n"||error=="y"))
@@ -259,12 +260,22 @@ void Store::searchUsers()//this is for the  store to search users the customer w
                     }
                     catch(...)
                     {
-                        cout <<"Please enter a valid numerical amount!" << endl;
+                        yeller=1;
+                    }
+                    if(addedMoney<=0 && yeller!=1)
+                    {
+                        cout << "Please enter a amount above $0.00!" << endl;
+                        yeller=0;
+                    }
+                    else if(yeller==1)
+                    {
+                        cout <<"Please enter a valid numerical amount above 0.00!" << endl;
                     }
                 }
                 customers[customers.size()-1].addMoney(addedMoney);
                 cout << "Success!, you added " << addedMoney << " dollars to your store account!" << endl;
                 cout << "Your store credit balance is now " << customers[customers.size()-1].getBankVal() << " dollars." << endl;
+                cin.ignore();
                 menu(indexAtFound);
             }
             else if(addMChoice=="n")
@@ -488,9 +499,56 @@ void Store::shopLift()//customers can try to steal things if they dont have enou
 {
 
 }
-void Store::viewBalance()//customers can see how much money they have before they pay for things
+void Store::viewBalance(int whoIs)//customers can see how much money they have before they pay for things
 {
-
+    string addMChoice;
+    string addedMoneyS;
+    double addedMoney=-1;
+    int yeller=0;
+    cout << "Your current balance is " << customers[whoIs].getBankVal()  << " dollars." << endl;
+    cout << "Add money to your store account: (y)es or (n)o? Input (n) to return to the main menu." << endl;
+    getline(cin,addMChoice);
+    
+    while(!(addMChoice=="n"||addMChoice=="y"))
+    {
+        cout <<"Please enter a valid lowercase option: (y)es or (n)o? Input (n) to return to the main menu." << endl;
+        getline(cin,addMChoice);
+    }
+    
+    if(addMChoice=="y")
+    {
+        cout << "How much money would you like to add to your account?" << endl;
+        while(addedMoney<=0)
+        {
+            try
+            {
+                cin >> addedMoneyS;
+                addedMoney=stod(addedMoneyS);//this while try catch block keeps prompting for the user to enter a proper numerical value until the added money double is more than 0, this wont happen if there is a stod error
+            }
+            catch(...)
+            {
+                yeller=1;
+            }
+            if(addedMoney<=0 && yeller!=1)
+            {
+                cout << "Please enter a amount above $0.00!" << endl;
+                yeller=0;
+            }
+            else if(yeller==1)
+            {
+                cout <<"Please enter a valid numerical amount above 0.00!" << endl;
+            }
+        }
+        customers[whoIs].addMoney(addedMoney);
+        cout << "Success!, you added " << addedMoney << " dollars to your store account!" << endl;
+        cout << "Your store credit balance is now " << customers[whoIs].getBankVal() << " dollars." << endl;
+        //cin.ignore();
+        menu(whoIs);
+    }
+    else if(addMChoice=="n")
+    {
+        menu(whoIs);
+    }
 }
 void Store::getReccomendations()//customers can get recomendations for foods clothing and electronics if they don't know what to buy
 {
@@ -556,7 +614,7 @@ void Store::leaveStore(int whoIs)
 {
     cout << "You leave the store for the day" << endl;
     daysOpen++;
-    menu(whoIs);
+    searchUsers();
 }
 void Store::setDaysOpen(int newDaysOpen)
 {
@@ -654,7 +712,7 @@ void Store::searchItems(int whoIs,int errorNuller)
         
         while(!(returnChoice=="m"||returnChoice=="s"))
         {
-            cout << "Would you like to return to the (m)ain menu or would you like to (s)earch for an item? (Input is case-sensitive)" << endl;
+            cout << "Would you like to return to the (m)ain menu or would you like to (s)earch for another item? (Input is case-sensitive)" << endl;
             getline(cin,returnChoice);
         }
     }
