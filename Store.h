@@ -21,8 +21,8 @@ class Store
         void loadCustomers();
         void menu(int whoIs);
         void searchUsers();
-        void buyItem(int whoIs);
-        void searchItems(int whoIs);
+        void buyItem(int whoIs,int errorNuller);
+        void searchItems(int whoIs,int errorNuller);
         void addItemtoFavorite();
         void shopLift();
         void quit();

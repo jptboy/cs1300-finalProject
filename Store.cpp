@@ -150,7 +150,7 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
     }
     else if(userChoice=="p")
     {
-        buyItem(whoIs);
+        buyItem(whoIs,1);
     }
     else if(userChoice=="g")
     {
@@ -174,7 +174,7 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
     }
     else if(userChoice=="s")
     {
-        searchItems(whoIs);
+        searchItems(whoIs,1);
     }
     else
     {
@@ -283,7 +283,7 @@ void Store::searchUsers()//this is for the  store to search users the customer w
     }
 
 }
-void Store::buyItem(int whoIs)//self explanitory
+void Store::buyItem(int whoIs,int errorNuller)//self explanitory
 {
     string whatItem;
     bool exists=false;
@@ -293,15 +293,17 @@ void Store::buyItem(int whoIs)//self explanitory
     int itemQuan=-1;
     string managerReq;
     
-    cout << "Would you like to return to the (m)ain menu or would you like to (p)urchase an item?" << endl;
-    getline(cin, returnChoice);
-    
-    while(!(returnChoice=="m"||returnChoice=="p"))
+    if(errorNuller!=1)
     {
-        cout << "Would you like to return to the (m)ain menu or would you like to (p)urchase an item? (Input is case-sensitive)" << endl;
-        getline(cin,returnChoice);
+        cout << "Would you like to return to the (m)ain menu or would you like to (p)urchase an item?" << endl;
+        getline(cin, returnChoice);
+        
+        while(!(returnChoice=="m"||returnChoice=="p"))
+        {
+            cout << "Would you like to return to the (m)ain menu or would you like to (p)urchase an item? (Input is case-sensitive)" << endl;
+            getline(cin,returnChoice);
+        }
     }
-    
     if(returnChoice=="m")
     {
         menu(whoIs);
@@ -316,7 +318,7 @@ void Store::buyItem(int whoIs)//self explanitory
         if(!exists)
         {
             cout << "We do not have " << whatItem <<"(s) in our inventory. You can only purchase what we have!" << endl;
-            buyItem(whoIs);
+            buyItem(whoIs,0);
         }
         else if(exists)
         {
@@ -358,13 +360,13 @@ void Store::buyItem(int whoIs)//self explanitory
                     }
                     if(managerReq=="p")
                     {
-                        buyItem(whoIs);
+                        buyItem(whoIs,0);
                     }
                     else if(managerReq=="s")
                     {
                         
                         cout << "The manager ordered more quantity of the item, 5 more will come in " << createOrder(itemType,positionInVec) << " day(s).";
-                        buyItem(whoIs);
+                        buyItem(whoIs,0);
                     }
                 }
                 else
@@ -380,7 +382,7 @@ void Store::buyItem(int whoIs)//self explanitory
                         customers[whoIs].addMoney(-1*(storeInventory.foods[positionInVec].getPrice()));//decreasing the store credit value of the person who just purchased the item
                         storeInventory.foods[positionInVec].setQuantity(itemQuan-1);//decreasing the number of the item just purchased
                         cout << "Your store credit balance is now: " << customers[whoIs].getBankVal() << " dollars." << endl;
-                        buyItem(whoIs);
+                        buyItem(whoIs,0);
                     }
                         
                 }
@@ -400,12 +402,12 @@ void Store::buyItem(int whoIs)//self explanitory
                     }
                     if(managerReq=="p")
                     {
-                        buyItem(whoIs);
+                        buyItem(whoIs,0);
                     }
                     else if(managerReq=="s")
                     {
                         cout << "The manager ordered more quantity of the item, 5 more will come in " << createOrder(itemType,positionInVec) << " day(s).";//change back to bad way if errors
-                        buyItem(whoIs);
+                        buyItem(whoIs,0);
                     }
                 }
                 else
@@ -421,7 +423,7 @@ void Store::buyItem(int whoIs)//self explanitory
                         customers[whoIs].addMoney(-1*(storeInventory.electronics[positionInVec].getPrice()));//decreasing the store credit value of the person who just purchased the item
                         storeInventory.electronics[positionInVec].setQuantity(itemQuan-1);//decreasing the number of the item just purchased
                         cout << "Your store credit balance is now: " << customers[whoIs].getBankVal() << " dollars." << endl;
-                        buyItem(whoIs);
+                        buyItem(whoIs,0);
                     }
                 }
             }
@@ -440,12 +442,12 @@ void Store::buyItem(int whoIs)//self explanitory
                     }
                     if(managerReq=="p")
                     {
-                        buyItem(whoIs);
+                        buyItem(whoIs,0);
                     }
                     else if(managerReq=="s")
                     {
                         cout << "The manager ordered more quantity of the item, 5 more will come in " << createOrder(itemType,positionInVec) << " day(s).";
-                        buyItem(whoIs);
+                        buyItem(whoIs,0);
                     }
                 }
                 else
@@ -462,7 +464,7 @@ void Store::buyItem(int whoIs)//self explanitory
                         customers[whoIs].addMoney(-1*(storeInventory.clothes[positionInVec].getPrice()));//decreasing the store credit value of the person who just purchased the item
                         storeInventory.clothes[positionInVec].setQuantity(itemQuan-1);//decreasing the number of the item just purchased
                         cout << "Your store credit balance is now: " << customers[whoIs].getBankVal() << " dollars." << endl;
-                        buyItem(whoIs);
+                        buyItem(whoIs,0);
                     }
                     
                            
@@ -638,21 +640,23 @@ void Store::makeOrders()
    
    // cout << orders.size() << endl;
 }
-void Store::searchItems(int whoIs)
+void Store::searchItems(int whoIs,int errorNuller)
 {
     bool exists;
     string itemChoice;
     string itemType;
     int itemIndex=-1;
-    string returnChoice;
-    
-    cout << "Would you like to return to the (m)ain menu or would you like to (s)earch for an item?" << endl;
-    getline(cin, returnChoice);
-    
-    while(!(returnChoice=="m"||returnChoice=="s"))
+    string returnChoice="s";
+    if(errorNuller!=1)
     {
-        cout << "Would you like to return to the (m)ain menu or would you like to (s)earch for an item? (Input is case-sensitive)" << endl;
-        getline(cin,returnChoice);
+        cout << "Would you like to return to the (m)ain menu or would you like to (s)earch for an item?" << endl;
+        getline(cin, returnChoice);
+        
+        while(!(returnChoice=="m"||returnChoice=="s"))
+        {
+            cout << "Would you like to return to the (m)ain menu or would you like to (s)earch for an item? (Input is case-sensitive)" << endl;
+            getline(cin,returnChoice);
+        }
     }
     
     if(returnChoice=="m")
@@ -719,7 +723,7 @@ void Store::searchItems(int whoIs)
                 exit(0);
             }
         }
-        searchItems(whoIs);
+        searchItems(whoIs,0);
     }
     
 }
