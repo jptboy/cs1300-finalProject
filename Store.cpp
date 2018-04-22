@@ -132,7 +132,7 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
     }
     else if(userChoice=="p")
     {
-        
+        buyItem(whoIs);
     }
     else if(userChoice=="g")
     {
@@ -176,6 +176,7 @@ void Store::searchUsers()//this is for the  store to search users the customer w
     string addedMoneyS;
     double addedMoney=-1;
     int indexAtFound=-1;
+    
     
     cout << "Please enter your first name into this system, so that we may serve you properly. Input is case-sensitive." << endl;
     cin >> enteredName;
@@ -262,9 +263,148 @@ void Store::searchUsers()//this is for the  store to search users the customer w
     }
 
 }
-void Store::buyItem()//self explanitory
+void Store::buyItem(int whoIs)//self explanitory
 {
-
+    string whatItem;
+    bool exists=false;
+    string returnChoice;
+    int positionInVec=-1;
+    string itemType;
+    int itemQuan=-1;
+    string managerReq;
+    
+    cout << "Would you like to return to the (m)ain menu or would you like to (p)urchase an item?" << endl;
+    getline(cin, returnChoice);
+    
+    while(!(returnChoice=="m"||returnChoice=="p"))
+    {
+        cout << "Would you like to return to the (m)ain menu or would you like to (p)urchase an item? (Input is case-sensitive)" << endl;
+        getline(cin,returnChoice);
+    }
+    
+    if(returnChoice=="m")
+    {
+        menu(whoIs);
+    }
+    else if(returnChoice=="p")
+    {
+        cout << "What item would you like to buy? Please browse the store or search for the item if you don't know!" << endl;
+        getline(cin, whatItem);
+        
+        exists=doesItemExist(whatItem);
+        
+        if(!exists)
+        {
+            cout << "We do not have " << whatItem <<"(s) in our inventory. You can only purchase what we have!" << endl;
+            buyItem(whoIs);
+        }
+        else if(exists)
+        {
+            positionInVec= whereDoesItemExist(whatItem);
+            
+            try
+            {
+                if(storeInventory.foods[positionInVec].getName()==whatItem)
+                {
+                    itemType="food";
+                }
+                else if(storeInventory.electronics[positionInVec].getName()==whatItem)
+                {
+                    itemType="electronic";
+                }
+                else if(storeInventory.clothes[positionInVec].getType()==whatItem)
+                {
+                    itemType="clothing";
+                }
+            }
+            catch(...)
+            {
+                cout << "Error determining what type of item user tried to purchase. Program terminated." << endl;
+                exit(0);
+            }
+            
+            if(itemType=="food")
+            {
+                itemQuan=storeInventory.foods[positionInVec].getQuantity();
+                if(itemQuan<=0)
+                {
+                    cout << "There are no " << storeInventory.foods[positionInVec].getName() << "(s) left. You can (s)end a request to a manager to order more or you can (p)urchase something else." << endl;
+                }
+                else
+                {
+                    if(customers[whoIs].getBankVal() < storeInventory.foods[positionInVec].getPrice())
+                    {
+                        cout << "You do not have enough store credit to purchase this item. Please input in the main menu that you wish to add money to your store account if you wish to attempt make this purchase again." << endl;
+                        menu(whoIs);
+                    }
+                    else
+                    {
+                        cout << "You purchased a " << whatItem << "for " << storeInventory.foods[positionInVec].getPrice() << " dollars."<< endl;
+                        customers[whoIs].addMoney(-1*(storeInventory.foods[positionInVec].getPrice()));//decreasing the store credit value of the person who just purchased the item
+                        storeInventory.foods[positionInVec].setQuantity(itemQuan-1);//decreasing the number of the item just purchased
+                        cout << "Your store credit balance is now: " << customers[whoIs].getBankVal() << " dollars." << endl;
+                    }
+                        
+                }
+            }
+            else if(itemType=="electronic")
+            {
+                itemQuan=storeInventory.electronics[positionInVec].getQuantity();
+                if(itemQuan<=0)
+                {
+                    cout << "There are no " << storeInventory.electronics[positionInVec].getName() << "(s) left. You can (s)end a request to a manager to order more or you can (p)urchase something else." << endl;
+                }
+                else
+                {
+                    if(customers[whoIs].getBankVal() < storeInventory.electronics[positionInVec].getPrice())
+                    {
+                        cout << "You do not have enough store credit to purchase this item. Please input in the main menu that you wish to add money to your store account if you wish to attempt make this purchase again." << endl;
+                        menu(whoIs);
+                    }
+                    else
+                    {
+                        cout << "You purchased a " << whatItem << "for " << storeInventory.electronics[positionInVec].getPrice() << " dollars."<< endl;
+                        customers[whoIs].addMoney(-1*(storeInventory.electronics[positionInVec].getPrice()));//decreasing the store credit value of the person who just purchased the item
+                        storeInventory.electronics[positionInVec].setQuantity(itemQuan-1);//decreasing the number of the item just purchased
+                        cout << "Your store credit balance is now: " << customers[whoIs].getBankVal() << " dollars." << endl;
+                    }
+                }
+            }
+            else if(itemType=="clothing")
+            {
+                itemQuan=storeInventory.clothes[positionInVec].getQuantity();
+                if(itemQuan<=0)
+                {
+                    cout << "There are no " << storeInventory.clothes[positionInVec].getType() << "(s) left. You can (s)end a request to a manager to order more or you can (p)urchase something else." << endl;
+                }
+                else
+                {
+                    
+                    if(customers[whoIs].getBankVal() < storeInventory.clothes[positionInVec].getPrice())
+                    {
+                        cout << "You do not have enough store credit to purchase this item. Please input in the main menu that you wish to add money to your store account if you wish to attempt make this purchase again." << endl;
+                        menu(whoIs);
+                    }
+                    else
+                    {
+                        cout << "You purchased a " << whatItem << "for " << storeInventory.clothes[positionInVec].getPrice() << " dollars."<< endl;
+                        customers[whoIs].addMoney(-1*(storeInventory.clothes[positionInVec].getPrice()));//decreasing the store credit value of the person who just purchased the item
+                        storeInventory.clothes[positionInVec].setQuantity(itemQuan-1);//decreasing the number of the item just purchased
+                        cout << "Your store credit balance is now: " << customers[whoIs].getBankVal() << " dollars." << endl;
+                    }
+                    
+                           
+                }
+            }
+            
+        }
+    }
+    else 
+    {
+        cout << "Major error when trying to purchase an item. This program will now terminate!" << endl;
+        exit(0);
+    }
+    
 }
 void Store::addItemtoFavorite()//customers can add items to their favorites
 {
@@ -422,6 +562,82 @@ void Store::searchItems(int whoIs)
         searchItems(whoIs);
     }
     
+}
+bool Store::doesItemExist(string whatItem)
+{
+    bool exists=false;
+    string itemChoice=whatItem;
+    int itemIndex=-1;
+        
+    for(int i=0; i<storeInventory.clothes.size();i++)
+    {
+        if(itemChoice==storeInventory.clothes[i].getType())
+        {
+            exists=true;
+            itemIndex=i;
+        }
+    }
+    for(int i=0; i<storeInventory.electronics.size();i++)
+    {
+        if(itemChoice==storeInventory.electronics[i].getName())
+        {
+            exists=true;
+            itemIndex=i;
+        }
+    }
+    for(int i=0; i<storeInventory.foods.size();i++)
+    {
+        if(itemChoice==storeInventory.foods[i].getName())
+        {
+            exists=true;
+            itemIndex=i;
+        }
+    }
+    return exists;
+}
+int Store::whereDoesItemExist(string whatItem)
+{
+    bool exists=doesItemExist(whatItem);
+    string itemChoice=whatItem;
+    int itemIndex=-1;
+    if(exists)    
+    {   for(int i=0; i<storeInventory.clothes.size();i++)
+        {
+            if(itemChoice==storeInventory.clothes[i].getType())
+            {
+                exists=true;
+                itemIndex=i;
+            }
+        }
+        for(int i=0; i<storeInventory.electronics.size();i++)
+        {
+            if(itemChoice==storeInventory.electronics[i].getName())
+            {
+                exists=true;
+                itemIndex=i;
+            }
+        }
+        for(int i=0; i<storeInventory.foods.size();i++)
+        {
+            if(itemChoice==storeInventory.foods[i].getName())
+            {
+                exists=true;
+                itemIndex=i;
+            }
+        }
+    }
+    else if(!exists)
+    {
+        cout << "A major error was about to be caused returning the position of an item so the program was terminated" << endl;
+        exit(0);
+    }
+    else
+    {
+        cout << "A major error was about to be caused returning the position of an item so the program was terminated" << endl;
+        exit(0);
+    }
+    
+    return itemIndex;
 }
 Customer Store::getCustomerAtIndex(unsigned int index)
 {

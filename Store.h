@@ -14,7 +14,7 @@ class Store
         void loadCustomers();
         void menu(int whoIs);
         void searchUsers();
-        void buyItem();
+        void buyItem(int whoIs);
         void searchItems(int whoIs);
         void addItemtoFavorite();
         void shopLift();
@@ -24,6 +24,8 @@ class Store
         void requestOrder();
         void viewItems(int whoIs);
         void addNewCustomer();
+        bool doesItemExist(string whatItem);
+        int whereDoesItemExist(string whatItem);
         Customer getCustomerAtIndex(unsigned int index);
         ~Store();
     private:

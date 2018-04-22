@@ -7,9 +7,9 @@ pie,8.73,60,sweet,america
 salad,6.74,47,salty,america
 sandwich,6.23,84,umami,america
 steak,14.83,23,umami,earth
-pizza,4.99,99,salty,earth
+pizza,4.99,0,salty,earth
 
-macbook,1200,50,computer,365
+macbook,1200,0,computer,365
 airpods,170,200,earbuds,365
 hdmi_6_feet,23,300,hdmi_cable,30
 qc35,349.99,78,headphone,180
@@ -20,7 +20,7 @@ galaxy_note_9,699.99,30,phone,720
 google_home,234.99,30,speaker,365
 bravia,450.99,20,tv,1500
 
-highcap_shorts,19.5,50,red,14,cargo_shorts
+highcap_shorts,19.5,0,red,14,cargo_shorts
 leather_coat,40,50,blue,18,coat
 spiffy_shirt,19.95,50,green,18,dress_shirt
 grippy_gloves,8.43,100,black,5,gloves
