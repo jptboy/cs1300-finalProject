@@ -173,7 +173,6 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
     string userChoice;
     cout << customers[whoIs].getName() << ", what would you like to do? You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (l)eave the store, (s)earch for and favorite items, view (f)avorite items, or (q)uit this system." << endl;
     
-    //cin.ignore();//character streams in c++ are a mystic art I guess and this fixes a problem but it also causes a problem
     getline(cin,userChoice);
     
     
@@ -205,6 +204,7 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
     }
     else if(userChoice=="q")
     {
+        daysOpen++;
         quit();
     }
     else if(userChoice=="f")
@@ -277,7 +277,7 @@ void Store::searchUsers()//this is for the  store to search users the customer w
             
             indexAtFound=customers.size()-1;
             
-            cout << "Add money to your store account: (y)es or (no)?" << endl;
+            cout << "Add money to your store account: (y)es or (n)o?" << endl;
             cout << "Your current balance is " << customers[customers.size()-1].getBankVal()  << " dollars." << endl;
             getline(cin,addMChoice);
             
@@ -836,7 +836,7 @@ void Store::viewItems(int whoIs)//for the customer to view the inventory of the 
         //the for loops below print out all of the foods electronics and and clothing objects from the stores inventory objects names and quanitities
         for(int i=0; i<storeInventory.foods.size();i++)
         {
-            cout << "Name: " << storeInventory.foods[i].getName() <<" | Quantity: " << storeInventory.foods[i].getQuantity() << endl;
+            cout << "Name: " << storeInventory.foods[i].getName() <<" | Quantity: " << storeInventory.foods[i].getQuantity() << " | Price: " << storeInventory.electronics[i].getPrice() << endl;
         }
         cout <<"----" << endl;
         viewItems(whoIs);
@@ -845,7 +845,7 @@ void Store::viewItems(int whoIs)//for the customer to view the inventory of the 
     {   cout <<"Electronics:"<< endl;
         for(int i=0; i<storeInventory.electronics.size();i++)
         {
-            cout << "Name: " << storeInventory.electronics[i].getName() <<" | Quantity: " << storeInventory.electronics[i].getQuantity() << endl;
+            cout << "Name: " << storeInventory.electronics[i].getName() <<" | Quantity: " << storeInventory.electronics[i].getQuantity() << " | Price: " << storeInventory.electronics[i].getPrice() << endl;
         }
         cout <<"----" << endl;
         viewItems(whoIs);
@@ -855,7 +855,7 @@ void Store::viewItems(int whoIs)//for the customer to view the inventory of the 
     {   cout <<"Clothes:"<< endl;
         for(int i=0; i<storeInventory.clothes.size();i++)
         {
-            cout << "Name: " << storeInventory.clothes[i].getType() <<" | Quantity: " << storeInventory.clothes[i].getQuantity() << endl;
+            cout << "Name: " << storeInventory.clothes[i].getType() <<" | Quantity: " << storeInventory.clothes[i].getQuantity() << " | Price: " << storeInventory.clothes[i].getPrice() << endl;
         }
         cout <<"----" << endl;
         viewItems(whoIs);
