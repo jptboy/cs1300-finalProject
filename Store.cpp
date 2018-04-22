@@ -416,7 +416,7 @@ void Store::buyItem(int whoIs,int errorNuller)//self explanitory
                     else if(managerReq=="s")
                     {
                         
-                        cout << "The manager ordered more quantity of the item, 5 more will come in " << createOrder(itemType,positionInVec) << " day(s).";
+                        cout << "The manager ordered more quantity of the item, 5 more will come in " << createOrder(itemType,positionInVec) << " day(s)." << endl;
                         buyItem(whoIs,0);
                     }
                 }
@@ -471,7 +471,7 @@ void Store::buyItem(int whoIs,int errorNuller)//self explanitory
                     }
                     else if(managerReq=="s")
                     {
-                        cout << "The manager ordered more quantity of the item, 5 more will come in " << createOrder(itemType,positionInVec) << " day(s).";//change back to bad way if errors
+                        cout << "The manager ordered more quantity of the item, 5 more will come in " << createOrder(itemType,positionInVec) << " day(s)."<< endl;//change back to bad way if errors
                         buyItem(whoIs,0);
                     }
                 }
@@ -526,7 +526,7 @@ void Store::buyItem(int whoIs,int errorNuller)//self explanitory
                     }
                     else if(managerReq=="s")
                     {
-                        cout << "The manager ordered more quantity of the item, 5 more will come in " << createOrder(itemType,positionInVec) << " day(s).";
+                        cout << "The manager ordered more quantity of the item, 5 more will come in " << createOrder(itemType,positionInVec) << " day(s)."<< endl;
                         buyItem(whoIs,0);
                     }
                 }

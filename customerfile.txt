@@ -16,7 +16,7 @@ Wakechai 742 burrito,spiffy_shirt,google_home
 Abay 831 steak,highcap_shorts,blackwidow
 Zaneta 696 ice_cream,leather_coat,airpods
 Qamar 615 steak,highcap_shorts,macbook
-Denny 771 pizza,cool_jeans,macbook
+Denny 751 pizza,cool_jeans,macbook
 Xaviere 727 pizza,thermal_socks,macbook
 Xi-wang 869 noodles,sporty_hoody,airpods
 Qismah 756 chicken_breast,leather_coat,bravia
@@ -25,5 +25,6 @@ Abilene 627 ice_cream,scratchy_sweater,qc35
 Qudeisha 827 cake,grippy_gloves,bravia
 Walter 534 pizza,athletic_shorts,galaxy_note
 Washington 783 cake,highcap_shorts,bravia
-Atul 65 pizza,leather_coat,NONE
+Atul 60 pizza,leather_coat,NONE
 Jared 9027 pizza,NONE,macbook
+Marvin 0 NONE,NONE,NONE

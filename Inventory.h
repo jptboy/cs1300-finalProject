@@ -6,7 +6,6 @@
 #include "Food.h"
 #include "Electronic.h"
 #include "Clothing.h"
-#include "Manager.h"
 using namespace std;
 class Inventory
 {

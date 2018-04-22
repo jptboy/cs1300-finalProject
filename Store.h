@@ -2,7 +2,6 @@
 #define STORE_H
 #include "Inventory.h"
 #include "Customer.h"
-#include "Manager.h"
 #include <vector>
 #include <iostream>
 using namespace std;
