@@ -3,7 +3,6 @@
 #include <vector>
 #include "Store.h"
 #include <stdlib.h>
-//#include "Split.h"
 using namespace std;
 int Store::Split(string s, char a, string word[], int size)//split function from recitation 7
 {
@@ -68,9 +67,8 @@ int Store::Split(string s, char a, string word[], int size)//split function from
     return subs;// return the number of substrings put into the array
 }
 Store::Store()
-{
+{   
     loadCustomers();
-    Inventory storeInventory;
 };
 void Store::loadCustomers()
 {
@@ -130,7 +128,7 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
     
     if(userChoice=="b")
     {
-        
+        viewItems(whoIs);
     }
     else if(userChoice=="p")
     {
@@ -280,9 +278,53 @@ void Store::getReccomendations()//customers can get recomendations for foods clo
 {
 
 }
-void Store::viewItems()//for the customer to view the inventory of the store and search it, they can narrow down to types of items and items
+void Store::viewItems(int whoIs)//for the customer to view the inventory of the store and search it, they can narrow down to types of items and items
 {
-
+    string userChoice;
+    cout <<"What category of items would you like to browse?: (f)oods, (e)lectronics, or (c)lothing? Or would you like to go back to the (m)ain menu?" << endl;
+    
+    getline(cin,userChoice);
+    while(!(userChoice=="f"||userChoice=="e"||userChoice=="c"||userChoice=="m"))
+    {
+        cout << "Please enter a valid lowercase choice!" << endl;
+        cout << "You can either browse from these selections: (f)oods, (e)lectronics, or (c)lothing or you can go back to the (m)ain menu." << endl;
+        getline(cin,userChoice);
+    }
+    
+    if(userChoice=="f")
+    {
+        cout <<"Foods:"<< endl;
+        //the for loops below print out all of the foods electronics and and clothing objects from the stores inventory objects names and quanitities
+        for(int i=0; i<storeInventory.foods.size();i++)
+        {
+            cout << "Name: " << storeInventory.foods[i].getName() <<" | Quantity: " << storeInventory.foods[i].getQuantity() << endl;
+        }
+        cout <<"----" << endl;
+        viewItems(whoIs);
+    }
+    else if(userChoice=="e")
+    {   cout <<"Electronics:"<< endl;
+        for(int i=0; i<storeInventory.electronics.size();i++)
+        {
+            cout << "Name: " << storeInventory.electronics[i].getName() <<" | Quantity: " << storeInventory.electronics[i].getQuantity() << endl;
+        }
+        cout <<"----" << endl;
+        viewItems(whoIs);
+    }
+    
+    else if(userChoice=="c")
+    {   cout <<"Clothes:"<< endl;
+        for(int i=0; i<storeInventory.clothes.size();i++)
+        {
+            cout << "Name: " << storeInventory.clothes[i].getType() <<" | Quantity: " << storeInventory.clothes[i].getQuantity() << endl;
+        }
+        cout <<"----" << endl;
+        viewItems(whoIs);
+    }
+    else if(userChoice=="m")
+    {
+        menu(whoIs);
+    }
 }
 void Store::requestOrder()
 {

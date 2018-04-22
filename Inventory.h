@@ -17,8 +17,7 @@ class Inventory
         void deleteItem();
         void getItem();
         ~Inventory();
-    private:
-        //vector <Item> items;
+        
         vector <Food> foods;
         vector <Clothing> clothes;
         vector <Electronic> electronics;
