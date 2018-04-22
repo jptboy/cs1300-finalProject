@@ -113,9 +113,54 @@ void Store::loadCustomers()
     searchUsers();
     return;
 }
-void Store::menu()//a menu asking customers what they want to do
+void Store::menu(int whoIs)//a menu asking customers what they want to do
 {
-
+    string userChoice;
+    cout << customers[whoIs].getName() << ", what would you like to do? You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (o)rder an item, (l)eave the store, or (q)uit this system." << endl;
+    
+    cin.ignore();
+    getline(cin,userChoice);
+    
+    
+    while(!(userChoice=="b"||userChoice=="p"||userChoice=="g"||userChoice=="v"||userChoice=="o"||userChoice=="l"||userChoice=="q"))
+    {
+        cout << "Please enter a valid lowercase choice " << customers[whoIs].getName() << endl << ". You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (o)rder an item, (l)eave the store, or (q)uit this system." << endl;
+        getline(cin,userChoice);
+    }
+    
+    if(userChoice=="b")
+    {
+        
+    }
+    else if(userChoice=="p")
+    {
+        
+    }
+    else if(userChoice=="g")
+    {
+        
+    }
+    else if(userChoice=="v")
+    {
+        
+    }
+    else if(userChoice=="o")
+    {
+        
+    }
+    else if(userChoice=="l")
+    {
+        
+    }
+    else if(userChoice=="q")
+    {
+        
+    }
+    else
+    {
+        cout << "An error happened please enter a choice again!" << endl;
+        menu(whoIs);
+    }
 }
 void Store::addNewCustomer()
 {
@@ -128,6 +173,7 @@ void Store::searchUsers()//this is for the  store to search users the customer w
     string addMChoice;
     string addedMoneyS;
     double addedMoney=-1;
+    int indexAtFound=-1;
     
     cout << "Please enter your first name into this system, so that we may serve you properly. Input is case-sensitive." << endl;
     cin >> enteredName;
@@ -142,7 +188,8 @@ void Store::searchUsers()//this is for the  store to search users the customer w
     {
         if(enteredName==customers[i].getName())
         {
-            found==true;
+            found=true;
+            indexAtFound=i;
         }
     }
     if(!found)
@@ -166,6 +213,8 @@ void Store::searchUsers()//this is for the  store to search users the customer w
             newCustomer.setName(enteredName);
             newCustomer.addMoney(0.01);
             customers.push_back(newCustomer);
+            
+            indexAtFound=customers.size()-1;
             
             cout << "Add money to your store account: (y)es or (no)?" << endl;
             cout << "Your current balance is " << customers[customers.size()-1].getBankVal()  << " dollars." << endl;
@@ -194,13 +243,20 @@ void Store::searchUsers()//this is for the  store to search users the customer w
                 }
                 customers[customers.size()-1].addMoney(addedMoney);
                 cout << "Success!, you added " << addedMoney << " dollars to your store account!" << endl;
-                cout << "Your store credit balance is now " << customers[customers.size()-1].getBankVal() << " dollars" << endl;
+                cout << "Your store credit balance is now " << customers[customers.size()-1].getBankVal() << " dollars." << endl;
+                menu(indexAtFound);
             }
             else if(addMChoice=="n")
             {
-                cout << "Go fuck yourself" << endl;
+                menu(indexAtFound);
             }
         }
+    }
+    
+    else if(found)
+    {
+        cout << "Welcome back to the store " << enteredName << ". You have " << customers[indexAtFound].getBankVal() << " dollars in your store account." << endl;
+        menu(indexAtFound);
     }
 
 }

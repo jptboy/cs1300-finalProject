@@ -11,7 +11,7 @@ class Store
     public:
         Store();
         void loadCustomers();
-        void menu();
+        void menu(int whoIs);
         void searchUsers();
         void buyItem();
         void addItemtoFavorite();
