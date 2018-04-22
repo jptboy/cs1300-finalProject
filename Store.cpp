@@ -130,15 +130,15 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
 {
     makeOrders();
     string userChoice;
-    cout << customers[whoIs].getName() << ", what would you like to do? You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (o)rder an item, (l)eave the store, (s)earch for and favorite items, or (q)uit this system." << endl;
+    cout << customers[whoIs].getName() << ", what would you like to do? You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (o)rder an item, (l)eave the store, (s)earch for and favorite items, view (f)avorite items, or (q)uit this system." << endl;
     
     //cin.ignore();//character streams in c++ are a mystic art I guess and this fixes a problem but it also causes a problem
     getline(cin,userChoice);
     
     
-    while(!(userChoice=="b"||userChoice=="p"||userChoice=="g"||userChoice=="v"||userChoice=="o"||userChoice=="l"||userChoice=="q"||userChoice=="s"))
+    while(!(userChoice=="b"||userChoice=="p"||userChoice=="g"||userChoice=="v"||userChoice=="o"||userChoice=="l"||userChoice=="q"||userChoice=="s" || userChoice=="f"))
     {
-        cout << "Please enter a valid lowercase choice " << customers[whoIs].getName() << ". You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (o)rder an item, (l)eave the store, (s)earch for and favorite items, or (q)uit this system." << endl;
+        cout << "Please enter a valid lowercase choice " << customers[whoIs].getName() << ". You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (o)rder an item, (l)eave the store, (s)earch for and favorite items, view (f)avorite items, or (q)uit this system." << endl;
         getline(cin,userChoice);
     }
     
@@ -169,6 +169,10 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
     else if(userChoice=="q")
     {
         
+    }
+    else if(userChoice=="f")
+    {
+        viewFavorites(whoIs);
     }
     else if(userChoice=="s")
     {
@@ -533,9 +537,65 @@ void Store::buyItem(int whoIs,int errorNuller)//self explanitory
     }
     
 }
+
 void Store::viewFavorites(int whoIs)
 {
+    string favEl=customers[whoIs].getFavoriteAtIndex(2);
+    string favFd=customers[whoIs].getFavoriteAtIndex(0);
+    string favCl=customers[whoIs].getFavoriteAtIndex(1);
+    string favArrs[]={favEl,favFd,favCl};
+    string types[]={"Electronic","Food","Clothing"};
     
+    int foodQ=-1;
+    int elQ=-1;
+    int clQ=-1;
+    string foodQS;
+    string elQS;
+    string clQS;
+    
+    if(favFd!="NONE")
+        {
+            foodQ=finderForItemQuantity(favFd);
+        }
+    if(favEl!="NONE")
+        {
+            elQ=finderForItemQuantity(favEl);
+        }
+    if(favCl!="NONE")
+        {
+            clQ=finderForItemQuantity(favCl);
+        }
+    
+    int quantsBfrStrCnv[]={elQ,foodQ,clQ};
+    string quants[]={elQS,foodQS,clQS};
+    
+    for(int i=0; i<3;i++)
+    {
+        if(quantsBfrStrCnv[i]!=-1)
+        {
+            quants[i]=to_string(quantsBfrStrCnv[i]);
+        }
+        else
+        {
+            quants[i]="Not applicable";
+        }
+    }
+    
+    for(int i=0; i<3;i++)
+    {
+        if(favArrs[i]=="NONE")
+        {
+            favArrs[i]="No favorite set.";
+        }
+    }
+    
+    
+    
+    cout << "Your favorite items are:" << endl;
+    for(int i=0; i<3;i++)
+        {cout << "Favorite "<< types[i]<< ": " << favArrs[i] << " Quantity: "<< quants[i] << endl;}
+    
+    menu(whoIs);
 }
 void Store::addItemtoFavorite()//customers can add items to their favorites
 {
@@ -544,6 +604,54 @@ void Store::addItemtoFavorite()//customers can add items to their favorites
 void Store::shopLift()//customers can try to steal things if they dont have enough money to pay for them
 {
 
+}
+int Store::finderForItemQuantity(string itemName)
+{
+    bool exists=doesItemExist(itemName);
+    string itemChoice=itemName;
+    int itemIndex=-1;
+    int itemQuantityFromName=-1;
+    if(exists)    
+    {   for(int i=0; i<storeInventory.clothes.size();i++)
+        {
+            if(itemChoice==storeInventory.clothes[i].getType())
+            {
+                exists=true;
+                itemIndex=i;
+                itemQuantityFromName=storeInventory.clothes[i].getQuantity();
+            }
+        }
+        for(int i=0; i<storeInventory.electronics.size();i++)
+        {
+            if(itemChoice==storeInventory.electronics[i].getName())
+            {
+                exists=true;
+                itemIndex=i;
+                itemQuantityFromName=storeInventory.electronics[i].getQuantity();
+            }
+        }
+        for(int i=0; i<storeInventory.foods.size();i++)
+        {
+            if(itemChoice==storeInventory.foods[i].getName())
+            {
+                exists=true;
+                itemIndex=i;
+                itemQuantityFromName=storeInventory.foods[i].getQuantity();
+            }
+        }
+    }
+    else if(!exists)
+    {
+        cout << "A major error was about to be caused returning the quantity of an item from its name so the program was terminated" << endl;
+        exit(0);
+    }
+    else
+    {
+        cout << "A major error was about to be caused returning the quantity of an item from its name so the program was terminated" << endl;
+        exit(0);
+    }
+    
+    return itemQuantityFromName;
 }
 void Store::viewBalance(int whoIs)//customers can see how much money they have before they pay for things
 {
