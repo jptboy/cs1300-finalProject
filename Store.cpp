@@ -929,7 +929,97 @@ Customer Store::getCustomerAtIndex(unsigned int index)
 {
     return customers[index];
 }
-
+string Store::getItemType(string itemName)
+{
+    bool exists=doesItemExist(itemName);
+    string itemChoice=itemName;
+    int itemIndex=-1;
+    string whatIsType;
+    if(exists)    
+    {   for(int i=0; i<storeInventory.clothes.size();i++)
+        {
+            if(itemChoice==storeInventory.clothes[i].getType())
+            {
+                exists=true;
+                itemIndex=i;
+                whatIsType="clothing";
+            }
+        }
+        for(int i=0; i<storeInventory.electronics.size();i++)
+        {
+            if(itemChoice==storeInventory.electronics[i].getName())
+            {
+                exists=true;
+                itemIndex=i;
+                whatIsType="electronic";
+            }
+        }
+        for(int i=0; i<storeInventory.foods.size();i++)
+        {
+            if(itemChoice==storeInventory.foods[i].getName())
+            {
+                exists=true;
+                itemIndex=i;
+                whatIsType="food";
+            }
+        }
+    }
+    else if(!exists)
+    {
+        cout << "A major error was about to be caused returning the type of an item so the program was terminated." << endl;
+        exit(0);
+    }
+    else
+    {
+        cout << "A major error was about to be caused returning the type of an item so the program was terminated." << endl;
+        exit(0);
+    }
+    
+    return whatIsType;
+}
+string Store::findObject(string itemType, int itemPos)
+{
+    if(itemType=="food")
+    {
+        return storeInventory.foods[itemPos].getName();
+    }
+    else if(itemType=="electronic")
+    {
+        return storeInventory.electronics[itemPos].getName();
+    }
+    else if(itemType=="clothing")
+    {
+        return storeInventory.clothes[itemPos].getType();
+    }
+}
+void Store::setCustFavs(string itemName, int whoIs)
+{
+    int itemPos = whereDoesItemExist(itemName);
+    string ItemType=getItemType(itemName);
+    int k=-1;
+    string theItem=findObject(ItemType,itemPos);
+    
+    if(ItemType=="food")
+    {
+        k=0;
+        customers[whoIs].setFavoriteAtIndex(k, theItem);
+    }
+    else if(ItemType=="electronic")
+    {
+        k=2;
+        customers[whoIs].setFavoriteAtIndex(k, theItem);
+    }
+    else if(ItemType=="clothing")
+    {
+        k=1;
+        customers[whoIs].setFavoriteAtIndex(k, theItem);
+    }
+    else
+    {
+        cout << "Major error setting favorite items! Program terminated." << endl;
+        exit(0);
+    }
+}
 
 Store::~Store()
 {

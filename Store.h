@@ -44,23 +44,9 @@ class Store
         void makeOrders();
         void loadDays();
         void leaveStore(int whoIs);
-        
-        template <class PsuedoObject>
-        PsuedoObject findObject(string itemType, int itemPos)
-        {
-            if(itemType=="food")
-            {
-                return storeInventory.foods[itemPos];
-            }
-            else if(itemType=="electronic")
-            {
-                return storeInventory.electronics[itemPos];
-            }
-            else if(itemType=="clothing")
-            {
-                return storeInventory.clothes[itemPos];
-            }
-        }
+        void setCustFavs(string itemName, int whoIs);
+        string getItemType(string itemName);
+        string findObject(string itemType, int itemPos);
         Customer getCustomerAtIndex(unsigned int index);
         ~Store();
     private:
