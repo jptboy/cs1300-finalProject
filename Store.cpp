@@ -73,7 +73,18 @@ int Store::Split(string s, char a, string word[], int size)//split function from
 Store::Store()
 {   
     loadCustomers();
+    loadDays();
 };
+void Store::loadDays()
+{
+    ifstream dayloader("day.txt");
+    string dayline;
+    int convertedDayline;
+    while(getline(dayloader,dayline))
+    {
+        daysOpen= stoi(dayline);
+    }
+}
 void Store::loadCustomers()
 {
     string custLine;//variable to hold the lines from the text file
@@ -113,7 +124,6 @@ void Store::loadCustomers()
     cout << "Success! Customers have been loaded." << endl;
     cout << "Welcome to the store, this computerized system will aid you through searching for items, making purchases, adding money to your store account,and a variety of other things." << endl;
     //MAKECHANGE
-    daysOpen=1;
     //MAKECHANGE
     searchUsers();
     return;
@@ -124,7 +134,7 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
     string userChoice;
     cout << customers[whoIs].getName() << ", what would you like to do? You can: (b)rowse the inventory, make a (p)urchase, (g)et item recomendations, (v)iew or add money to your store credit balance, (o)rder an item, (l)eave the store, (s)earch for an item, or (q)uit this system." << endl;
     
-    cin.ignore();//character streams in c++ are a mystic art I guess and this fixes a problem but it also causes a problem
+    //cin.ignore();//character streams in c++ are a mystic art I guess and this fixes a problem but it also causes a problem
     getline(cin,userChoice);
     
     
@@ -156,7 +166,7 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
     }
     else if(userChoice=="l")
     {
-        
+        leaveStore(whoIs);
     }
     else if(userChoice=="q")
     {
@@ -267,6 +277,8 @@ void Store::searchUsers()//this is for the  store to search users the customer w
     else if(found)
     {
         cout << "Welcome back to the store " << enteredName << ". You have " << customers[indexAtFound].getBankVal() << " dollars in your store account." << endl;
+        cout << flush;
+        cin.ignore();
         menu(indexAtFound);
     }
 
@@ -275,7 +287,7 @@ void Store::buyItem(int whoIs)//self explanitory
 {
     string whatItem;
     bool exists=false;
-    string returnChoice;
+    string returnChoice="p";
     int positionInVec=-1;
     string itemType;
     int itemQuan=-1;
@@ -350,8 +362,8 @@ void Store::buyItem(int whoIs)//self explanitory
                     }
                     else if(managerReq=="s")
                     {
-                        cout << "The manager ordered more quantity of the item, n_1 more will come in n days." << endl;
-                        createOrder(itemType,positionInVec);
+                        
+                        cout << "The manager ordered more quantity of the item, 5 more will come in " << createOrder(itemType,positionInVec) << " day(s).";
                         buyItem(whoIs);
                     }
                 }
@@ -368,6 +380,7 @@ void Store::buyItem(int whoIs)//self explanitory
                         customers[whoIs].addMoney(-1*(storeInventory.foods[positionInVec].getPrice()));//decreasing the store credit value of the person who just purchased the item
                         storeInventory.foods[positionInVec].setQuantity(itemQuan-1);//decreasing the number of the item just purchased
                         cout << "Your store credit balance is now: " << customers[whoIs].getBankVal() << " dollars." << endl;
+                        buyItem(whoIs);
                     }
                         
                 }
@@ -391,8 +404,7 @@ void Store::buyItem(int whoIs)//self explanitory
                     }
                     else if(managerReq=="s")
                     {
-                        cout << "The manager ordered more quantity of the item, n_1 more will come in n days." << endl;
-                        createOrder(itemType,positionInVec);
+                        cout << "The manager ordered more quantity of the item, 5 more will come in " << createOrder(itemType,positionInVec) << " day(s).";//change back to bad way if errors
                         buyItem(whoIs);
                     }
                 }
@@ -409,6 +421,7 @@ void Store::buyItem(int whoIs)//self explanitory
                         customers[whoIs].addMoney(-1*(storeInventory.electronics[positionInVec].getPrice()));//decreasing the store credit value of the person who just purchased the item
                         storeInventory.electronics[positionInVec].setQuantity(itemQuan-1);//decreasing the number of the item just purchased
                         cout << "Your store credit balance is now: " << customers[whoIs].getBankVal() << " dollars." << endl;
+                        buyItem(whoIs);
                     }
                 }
             }
@@ -431,8 +444,7 @@ void Store::buyItem(int whoIs)//self explanitory
                     }
                     else if(managerReq=="s")
                     {
-                        cout << "The manager ordered more quantity of the item, n_1 more will come in n days." << endl;
-                        createOrder(itemType,positionInVec);
+                        cout << "The manager ordered more quantity of the item, 5 more will come in " << createOrder(itemType,positionInVec) << " day(s).";
                         buyItem(whoIs);
                     }
                 }
@@ -450,6 +462,7 @@ void Store::buyItem(int whoIs)//self explanitory
                         customers[whoIs].addMoney(-1*(storeInventory.clothes[positionInVec].getPrice()));//decreasing the store credit value of the person who just purchased the item
                         storeInventory.clothes[positionInVec].setQuantity(itemQuan-1);//decreasing the number of the item just purchased
                         cout << "Your store credit balance is now: " << customers[whoIs].getBankVal() << " dollars." << endl;
+                        buyItem(whoIs);
                     }
                     
                            
@@ -537,6 +550,12 @@ void Store::quit()//I might name this leaveStore
 {
 
 }
+void Store::leaveStore(int whoIs)
+{
+    cout << "You leave the store for the day" << endl;
+    daysOpen++;
+    menu(whoIs);
+}
 void Store::setDaysOpen(int newDaysOpen)
 {
     daysOpen=newDaysOpen;
@@ -545,50 +564,51 @@ int Store::getDaysOpen()
 {
     return daysOpen;
 }
-void Store::createOrder(string itemType, int itemPos)
+int Store::createOrder(string itemType, int itemPos)
 {
     
     int randDay=-1;
     int lowQuantity=-1;
     srand((int) time(0));//random number generation from 1 to 5, here we seed value to start with which is the time so that we get actual random runs
     randDay= (rand()%5) + 1;
-    
+    //randDay=1;
     Electronic possibleEl;
     Clothing possibleCl;
     Food possibleFd;
     if(itemType=="food")
     {
         possibleFd=storeInventory.foods[itemPos];
-        possibleCl.~Clothing();
-        possibleEl.~Electronic();
+        //possibleCl.~Clothing();
+        //possibleEl.~Electronic();
         lowQuantity= 5;
         
     }
     else if(itemType=="clothing")
     {
         possibleCl=storeInventory.clothes[itemPos];
-        possibleEl.~Electronic();
-        possibleFd.~Food();
+        //possibleEl.~Electronic();
+        //possibleFd.~Food();
         lowQuantity=5;
         
     }
     else if(itemType=="electronic")
     {
         possibleEl=storeInventory.electronics[itemPos];
-        possibleCl.~Clothing();
-        possibleFd.~Food();
+        //possibleCl.~Clothing();
+        //possibleFd.~Food();
         lowQuantity= 5;
         
     }
     
     orderSchedule newOrder;
-    newOrder.dayTillOrder=daysOpen+randDay;
+    newOrder.dayTillOrder=randDay+daysOpen;
     newOrder.currDay=daysOpen;//giving instantiated struct members values
     newOrder.itemQuantity=lowQuantity;
     newOrder.itemType=itemType;
     newOrder.itemPos=itemPos;
     
     orders.push_back(newOrder);
+    return randDay;
     
 }
 
@@ -601,17 +621,22 @@ void Store::makeOrders()
             if(orders[i].itemType=="food")
             {
                 storeInventory.foods[orders[i].itemPos].setQuantity((storeInventory.foods[orders[i].itemPos].getQuantity()+5));
+                orders.pop_back();
             }
             else if(orders[i].itemType=="electronic")
             {
                 storeInventory.electronics[orders[i].itemPos].setQuantity((storeInventory.electronics[orders[i].itemPos].getQuantity()+5));
+                orders.pop_back();
             }
             else if(orders[i].itemType=="clothing")
             {
-                storeInventory.clothes[orders[i].itemPos].setQuantity((storeInventory.clothes[orders[i].itemPos].getQuantity()+5));
+                storeInventory.clothes[orders[i].itemPos].setQuantity((storeInventory.clothes[orders[i].itemPos].getQuantity()+5));//unwanted behavior may appear here
+                orders.pop_back();
             }
         }
     }
+   
+   // cout << orders.size() << endl;
 }
 void Store::searchItems(int whoIs)
 {

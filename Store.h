@@ -31,12 +31,14 @@ class Store
         void requestOrder();
         void viewItems(int whoIs);
         void addNewCustomer();
-        void createOrder(string itemType, int itemPos);
+        int createOrder(string itemType, int itemPos);
         bool doesItemExist(string whatItem);
         int whereDoesItemExist(string whatItem);
         void setDaysOpen(int newDaysOpen);
         int getDaysOpen();
         void makeOrders();
+        void loadDays();
+        void leaveStore(int whoIs);
         template <class PsuedoObject>
         PsuedoObject findObject(string itemType, int itemPos)
         {
