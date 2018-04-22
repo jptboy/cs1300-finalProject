@@ -872,9 +872,44 @@ void Store::requestOrder()
 void Store::quit()
 {
     ofstream updateDays("day.txt");
-    
     updateDays << daysOpen << endl;
+    updateDays.close();
     
+    ofstream updateOrders("orders.txt");
+    for(int i=0; i<orders.size(); i++)
+    {
+        updateOrders << orders[i].dayTillOrder << "," << orders[i].itemQuantity<< "," << orders[i].currDay<< "," << orders[i].itemType<< "," << orders[i].itemPos; 
+    }
+    if(orders.size()==0)
+    {
+        updateOrders <<"";
+    }
+    updateOrders.close();
+    
+    ofstream updateCustomers("customerfile.txt");
+    for(int i=0; i<customers.size();i++)
+    {
+        updateCustomers << customers[i].getName() <<" " << customers[i].getBankVal()<<" " << customers[i].getFavoriteAtIndex(0) <<","<< customers[i].getFavoriteAtIndex(1) <<","<< customers[i].getFavoriteAtIndex(2)<<endl;
+    }
+    updateCustomers.close();
+    
+    ofstream updateInventory("inventoryfile.txt");
+    
+    for(int i=0; i<storeInventory.foods.size(); i++)
+    {
+        updateInventory << storeInventory.foods[i].getName() <<","<< storeInventory.foods[i].getPrice()<<","<< storeInventory.foods[i].getQuantity()<<","<< storeInventory.foods[i].getTaste()<<"," <<storeInventory.foods[i].getEthnicOrigin() <<endl;
+    }
+    updateInventory<<endl;
+    for(int i=0; i<storeInventory.electronics.size(); i++)
+    {
+        updateInventory << storeInventory.electronics[i].getName()<<","<< storeInventory.electronics[i].getPrice()<<","<< storeInventory.electronics[i].getQuantity()<<","<< storeInventory.electronics[i].getdeviceType()<<"," <<storeInventory.electronics[i].getWarrantyLength()<<endl;
+    }
+    updateInventory<<endl;
+    for(int i=0; i<storeInventory.clothes.size(); i++)
+    {
+        updateInventory << storeInventory.clothes[i].getType()<<","<< storeInventory.clothes[i].getPrice()<<","<< storeInventory.clothes[i].getQuantity()<<","<< storeInventory.clothes[i].getColor()<<"," <<storeInventory.clothes[i].getSize() <<","<<"PLACEHOLDER"<<endl;
+    }
+    updateInventory.close();
     exit(0);
 }
 void Store::leaveStore(int whoIs)

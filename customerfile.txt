@@ -16,7 +16,7 @@ Wakechai 742 burrito,spiffy_shirt,google_home
 Abay 831 steak,highcap_shorts,blackwidow
 Zaneta 696 ice_cream,leather_coat,airpods
 Qamar 615 steak,highcap_shorts,macbook
-Denny 776 pie,cool_jeans,hdmi_6_feet
+Denny 771 pizza,cool_jeans,macbook
 Xaviere 727 pizza,thermal_socks,macbook
 Xi-wang 869 noodles,sporty_hoody,airpods
 Qismah 756 chicken_breast,leather_coat,bravia

@@ -7,7 +7,7 @@ pie,8.73,60,sweet,america
 salad,6.74,47,salty,america
 sandwich,6.23,84,umami,america
 steak,14.83,23,umami,earth
-pizza,4.99,4,salty,earth
+pizza,4.99,0,salty,earth
 
 macbook,1200,0,computer,365
 airpods,170,200,earbuds,365
