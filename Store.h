@@ -14,6 +14,11 @@ struct orderSchedule
     string itemType;
     int itemPos;
 };
+struct itemDescriber
+{
+  int itemPos;
+  string itemName;
+};
 class Store
 {
     public:
@@ -27,7 +32,7 @@ class Store
         void shopLift();
         void quit();
         void viewBalance(int whoIs);
-        void getReccomendations();
+        void getReccomendations(int whoIs);
         void requestOrder();
         void viewItems(int whoIs);
         void addNewCustomer();

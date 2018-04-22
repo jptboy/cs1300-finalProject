@@ -123,8 +123,6 @@ void Store::loadCustomers()
     }
     cout << "Success! Customers have been loaded." << endl;
     cout << "Welcome to the store, this system will aid you through searching for items, making purchases, adding money to your store account,and a variety of other things." << endl;
-    //MAKECHANGE
-    //MAKECHANGE
     searchUsers();
     return;
 }
@@ -154,7 +152,7 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
     }
     else if(userChoice=="g")
     {
-        
+        getReccomendations(whoIs);
     }
     else if(userChoice=="v")
     {
@@ -550,9 +548,81 @@ void Store::viewBalance(int whoIs)//customers can see how much money they have b
         menu(whoIs);
     }
 }
-void Store::getReccomendations()//customers can get recomendations for foods clothing and electronics if they don't know what to buy
+void Store::getReccomendations(int whoIs)//customers can get recomendations for foods clothing and electronics if they don't know what to buy
 {
-
+    double similarityScore=0;
+    vector <itemDescriber> alreadyFavs;
+    vector <string> stopsRepeat;
+    bool isRepeated=false;
+    bool isinVec=false;
+    for(int i=0; i<customers.size();i++)
+    {
+        if(customers[i].getFavoriteAtIndex(0)==customers[whoIs].getFavoriteAtIndex(0))
+        {
+            similarityScore++;
+        }
+        else if(customers[i].getFavoriteAtIndex(1)==customers[whoIs].getFavoriteAtIndex(1))
+        {
+            similarityScore++;
+        }
+        else if(customers[i].getFavoriteAtIndex(2)==customers[whoIs].getFavoriteAtIndex(2))
+        {
+            similarityScore++;
+        }
+        
+        
+        for(int k=0; k<2; k++)
+        {
+            
+            if(customers[i].getFavoriteAtIndex(k)==customers[whoIs].getFavoriteAtIndex(k))
+            {
+                isinVec=true;
+            }
+            
+            for(int j=0; j<alreadyFavs.size();j++)
+            {
+                if(customers[whoIs].getFavoriteAtIndex(k)==alreadyFavs[j].itemName)
+                {
+                    isinVec=true;
+                }
+            }
+            
+            if(!isinVec && (similarityScore >0 && similarityScore < 3))
+            {
+                itemDescriber newItemtoAdd;
+                newItemtoAdd.itemName=customers[i].getFavoriteAtIndex(k);
+                newItemtoAdd.itemPos=whereDoesItemExist(newItemtoAdd.itemName);
+                alreadyFavs.push_back(newItemtoAdd);
+            }
+        }
+    }
+    
+    if(alreadyFavs.size()>0)
+    {
+        cout << "Reccomended items based on people with similar favorite items to you are: " << endl;
+        for(int i=0; i<alreadyFavs.size(); i++)
+        {
+            isRepeated=false;
+            for(int j=0; j<stopsRepeat.size();j++)
+            {
+                if(stopsRepeat[j]==alreadyFavs[i].itemName)
+                    {isRepeated=true;}
+            }
+            if(!isRepeated)
+            {
+                cout << alreadyFavs[i].itemName << endl;
+            }
+            
+            stopsRepeat.push_back(alreadyFavs[i].itemName);
+        }
+        
+    }
+    else
+    {
+        cout << "You have no item reccomendations at this time." << endl;
+    }
+    
+    menu(whoIs);
 }
 void Store::viewItems(int whoIs)//for the customer to view the inventory of the store and search it, they can narrow down to types of items and items
 {
@@ -638,24 +708,18 @@ int Store::createOrder(string itemType, int itemPos)
     if(itemType=="food")
     {
         possibleFd=storeInventory.foods[itemPos];
-        //possibleCl.~Clothing();
-        //possibleEl.~Electronic();
         lowQuantity= 5;
         
     }
     else if(itemType=="clothing")
     {
         possibleCl=storeInventory.clothes[itemPos];
-        //possibleEl.~Electronic();
-        //possibleFd.~Food();
         lowQuantity=5;
         
     }
     else if(itemType=="electronic")
     {
         possibleEl=storeInventory.electronics[itemPos];
-        //possibleCl.~Clothing();
-        //possibleFd.~Food();
         lowQuantity= 5;
         
     }

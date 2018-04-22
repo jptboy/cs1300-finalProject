@@ -1,5 +1,5 @@
 Joe 1000 chicken_breast,thermal_socks,macbook
-Xing 587 cake,scratchy_sweater,airpods
+Xing 587 cake,highcap_shorts,airpods
 Qadan 632 sandwich,athletic_shorts,hdmi_6_feet
 Zaire 720 sandwich,grippy_gloves,qc35
 Walden 520 salad,cool_jeans,blackwidow
