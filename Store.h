@@ -8,7 +8,7 @@
 using namespace std;
 class Store
 {
-        //friend class Inventory;
+
     public:
         Store();
         void loadCustomers();

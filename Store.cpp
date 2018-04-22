@@ -329,6 +329,21 @@ void Store::buyItem(int whoIs)//self explanitory
                 if(itemQuan<=0)
                 {
                     cout << "There are no " << storeInventory.foods[positionInVec].getName() << "(s) left. You can (s)end a request to a manager to order more or you can (p)urchase something else." << endl;
+                    getline(cin, managerReq);
+                    
+                    while(!(managerReq=="p"||managerReq=="s"))
+                    {
+                        cout << "Please enter a valid lower case option." << endl;
+                        getline(cin, managerReq);
+                    }
+                    if(managerReq=="p")
+                    {
+                        buyItem(whoIs);
+                    }
+                    else if(managerReq=="s")
+                    {
+                        cout << "Feature does not exist yet" << endl;
+                    }
                 }
                 else
                 {
@@ -353,6 +368,21 @@ void Store::buyItem(int whoIs)//self explanitory
                 if(itemQuan<=0)
                 {
                     cout << "There are no " << storeInventory.electronics[positionInVec].getName() << "(s) left. You can (s)end a request to a manager to order more or you can (p)urchase something else." << endl;
+                    getline(cin, managerReq);
+                    
+                    while(!(managerReq=="p"||managerReq=="s"))
+                    {
+                        cout << "Please enter a valid lower case option." << endl;
+                        getline(cin, managerReq);
+                    }
+                    if(managerReq=="p")
+                    {
+                        buyItem(whoIs);
+                    }
+                    else if(managerReq=="s")
+                    {
+                        cout << "Feature does not exist yet" << endl;
+                    }
                 }
                 else
                 {
@@ -376,6 +406,21 @@ void Store::buyItem(int whoIs)//self explanitory
                 if(itemQuan<=0)
                 {
                     cout << "There are no " << storeInventory.clothes[positionInVec].getType() << "(s) left. You can (s)end a request to a manager to order more or you can (p)urchase something else." << endl;
+                    getline(cin, managerReq);
+                    
+                    while(!(managerReq=="p"||managerReq=="s"))
+                    {
+                        cout << "Please enter a valid lower case option." << endl;
+                        getline(cin, managerReq);
+                    }
+                    if(managerReq=="p")
+                    {
+                        buyItem(whoIs);
+                    }
+                    else if(managerReq=="s")
+                    {
+                        cout << "Feature does not exist yet" << endl;
+                    }
                 }
                 else
                 {
