@@ -10,9 +10,13 @@ Atul showed me how to generate random numbers
 2.
 I pretty much knew everything else and I learned structs by messing with them
 
-I wrote a shell script that is supposed to compile and run my output file but for somereason bash says no permission even if you do 
-$ chmod -u -x ./runprogram.sh 
-The bash command to compile my program is here then I guess:
+I wrote a shell script that is supposed to compile and run my output file
+So you can give it a go 
+
+$ chmod +x ./runprogram.sh
+$ ./runprogram.sh
+
+The bash command to compile my program is here though:
 
 g++ -std=c++11 storeDriver.cpp Store.cpp Inventory.cpp Customer.cpp Electronic.cpp Clothing.cpp Food.cpp Item.cpp -o ./test.o
 
@@ -22,7 +26,7 @@ The main cool thing about my program is the createOrder() function and the makeO
 
 I don't really know if we were to include a file like this with our project, but I feel like I would go crazy without some sort of guide having to grade 40 projects.
 
-Most of my code is in the Store class which controls all the functions of the store that I mentioned before. The flow of the program is somewhat like the library program but the scope and functionality of this is as if the Library program took steroids.
+Most of my code is in the Store class which does pretty much everything and the Inventory class which manages the inventory. The flow of the program is somewhat like the library program but the scope and functionality of this is as if the Library program took steroids.
 
 The steps to my program are as follow:
     Load Files
