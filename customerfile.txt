@@ -25,6 +25,6 @@ Abilene 627 ice_cream,scratchy_sweater,qc35
 Qudeisha 827 cake,grippy_gloves,bravia
 Walter 534 pizza,athletic_shorts,galaxy_note
 Washington 783 cake,highcap_shorts,bravia
-Atul 60 pizza,leather_coat,NONE
+Atul 8781 pizza,leather_coat,macbook
 Jared 9027 pizza,NONE,macbook
 Marvin 0 NONE,NONE,NONE

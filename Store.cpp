@@ -73,7 +73,7 @@ int Store::Split(string s, char a, string word[], int size)//split function from
 Store::Store()
 {   
     loadDays();
-    loadOrders();
+    loadOrders();//load all of the files
     loadCustomers();
 };
 void Store::loadDays()
@@ -94,7 +94,7 @@ void Store::loadDays()
 void Store::loadOrders()
 {
     string orderLine;
-    string orderHolder[5];
+    string orderHolder[5];//the load functions are self explanatory
     int orderHolderSize=5;
     
     ifstream loadOrderfromFile("orders.txt");
@@ -162,7 +162,7 @@ void Store::loadCustomers()
          
         
     }
-    cout << "Success! Customers have been loaded." << endl;
+    cout << "Success! All files loaded." << endl;
     cout << "Welcome to the store, this system will aid you through searching for items, making purchases, adding money to your store account,and a variety of other things." << endl;
     searchUsers();
     return;
@@ -221,10 +221,7 @@ void Store::menu(int whoIs)//a menu asking customers what they want to do
         menu(whoIs);
     }
 }
-void Store::addNewCustomer()
-{
 
-}
 void Store::searchUsers()//this is for the  store to search users the customer wont be seeing this or using it
 {
     string enteredName;
@@ -250,10 +247,10 @@ void Store::searchUsers()//this is for the  store to search users the customer w
         if(enteredName==customers[i].getName())
         {
             found=true;
-            indexAtFound=i;
+            indexAtFound=i;//seeing if the user is found
         }
     }
-    if(!found)
+    if(!found)//process to create a new user
     {
         string error="z";
         cout << "You appear to be a new customer. If this is not correct please type (n) to enter your name in again otherwise please type in (y)." << endl;
@@ -332,17 +329,18 @@ void Store::searchUsers()//this is for the  store to search users the customer w
         menu(indexAtFound);
     }
 
-}
+}//this function searches for the user in the database and asks them to enter their credentials if they are new
 void Store::buyItem(int whoIs,int errorNuller)//self explanitory
 {
     string whatItem;
     bool exists=false;
-    string returnChoice="p";
+    string returnChoice="p";//used to buy items
     int positionInVec=-1;
     string itemType;
     int itemQuan=-1;
     string managerReq;
     string favOrNot;
+    bool iteminFavs=false;
     
     if(errorNuller!=1)
     {
@@ -374,6 +372,14 @@ void Store::buyItem(int whoIs,int errorNuller)//self explanitory
         else if(exists)
         {
             positionInVec= whereDoesItemExist(whatItem);
+            
+            for(int i=0;i<3;i++)
+            {
+                if(customers[whoIs].getFavoriteAtIndex(i)==whatItem)
+                {
+                    iteminFavs=true;
+                }
+            }
             
             try
             {
@@ -434,19 +440,21 @@ void Store::buyItem(int whoIs,int errorNuller)//self explanitory
                         storeInventory.foods[positionInVec].setQuantity(itemQuan-1);//decreasing the number of the item just purchased
                         cout << "Your store credit balance is now: " << customers[whoIs].getBankVal() << " dollars." << endl;
                         
-                        favOrNot="z";
-                        cout << "Would you like to favorite this item?: (y)es or (n)o?" << endl;
-                        getline(cin, favOrNot);
-                        while(!(favOrNot=="n"||favOrNot=="y"))
+                        if(!iteminFavs)
                         {
-                            cout <<"Please enter a valid option from these choices : (y)es or (n)o" << endl;
-                            getline(cin,favOrNot);
+                            favOrNot="z";
+                            cout << "Would you like to favorite this item?: (y)es or (n)o?" << endl;
+                            getline(cin, favOrNot);
+                            while(!(favOrNot=="n"||favOrNot=="y"))
+                            {
+                                cout <<"Please enter a valid option from these choices : (y)es or (n)o" << endl;
+                                getline(cin,favOrNot);
+                            }
+                            if(favOrNot=="y")
+                            {
+                                setCustFavs(whatItem,whoIs);
+                            }
                         }
-                        if(favOrNot=="y")
-                        {
-                            setCustFavs(whatItem,whoIs);
-                        }
-                        
                         buyItem(whoIs,0);
                     }
                         
@@ -471,7 +479,7 @@ void Store::buyItem(int whoIs,int errorNuller)//self explanitory
                     }
                     else if(managerReq=="s")
                     {
-                        cout << "The manager ordered more quantity of the item, 5 more will come in " << createOrder(itemType,positionInVec) << " day(s)."<< endl;//change back to bad way if errors
+                        cout << "The manager ordered more quantity of the item, 5 more will come in " << createOrder(itemType,positionInVec) << " day(s)."<< endl;//If there is no stock then the customer can ask the manager to order the items
                         buyItem(whoIs,0);
                     }
                 }
@@ -489,19 +497,21 @@ void Store::buyItem(int whoIs,int errorNuller)//self explanitory
                         storeInventory.electronics[positionInVec].setQuantity(itemQuan-1);//decreasing the number of the item just purchased
                         cout << "Your store credit balance is now: " << customers[whoIs].getBankVal() << " dollars." << endl;
                         
-                        favOrNot="z";
-                        cout << "Would you like to favorite this item?: (y)es or (n)o?" << endl;
-                        getline(cin, favOrNot);
-                        while(!(favOrNot=="n"||favOrNot=="y"))
+                        if(!iteminFavs)
                         {
-                            cout <<"Please enter a valid option from these choices : (y)es or (n)o" << endl;
-                            getline(cin,favOrNot);
+                            favOrNot="z";
+                            cout << "Would you like to favorite this item?: (y)es or (n)o?" << endl;
+                            getline(cin, favOrNot);
+                            while(!(favOrNot=="n"||favOrNot=="y"))
+                            {
+                                cout <<"Please enter a valid option from these choices : (y)es or (n)o" << endl;
+                                getline(cin,favOrNot);
+                            }
+                            if(favOrNot=="y")
+                            {
+                                setCustFavs(whatItem,whoIs);
+                            }
                         }
-                        if(favOrNot=="y")
-                        {
-                            setCustFavs(whatItem,whoIs);
-                        }
-                        
                         buyItem(whoIs,0);
                         
                     }
@@ -545,19 +555,21 @@ void Store::buyItem(int whoIs,int errorNuller)//self explanitory
                         storeInventory.clothes[positionInVec].setQuantity(itemQuan-1);//decreasing the number of the item just purchased
                         cout << "Your store credit balance is now: " << customers[whoIs].getBankVal() << " dollars." << endl;
                         
-                        favOrNot="z";
-                        cout << "Would you like to favorite this item?: (y)es or (n)o?" << endl;
-                        getline(cin, favOrNot);
-                        while(!(favOrNot=="n"||favOrNot=="y"))
+                        if(!iteminFavs)
                         {
-                            cout <<"Please enter a valid option from these choices : (y)es or (n)o" << endl;
-                            getline(cin,favOrNot);
+                            favOrNot="z";
+                            cout << "Would you like to favorite this item?: (y)es or (n)o?" << endl;
+                            getline(cin, favOrNot);
+                            while(!(favOrNot=="n"||favOrNot=="y"))
+                            {
+                                cout <<"Please enter a valid option from these choices : (y)es or (n)o" << endl;
+                                getline(cin,favOrNot);
+                            }
+                            if(favOrNot=="y")
+                            {
+                                setCustFavs(whatItem,whoIs);
+                            }
                         }
-                        if(favOrNot=="y")
-                        {
-                            setCustFavs(whatItem,whoIs);
-                        }
-                        
                         buyItem(whoIs,0);
                     }
                     
@@ -638,10 +650,7 @@ void Store::addItemtoFavorite()//customers can add items to their favorites
 {
 
 }
-void Store::shopLift()//customers can try to steal things if they dont have enough money to pay for them
-{
 
-}
 int Store::finderForItemQuantity(string itemName)
 {
     bool exists=doesItemExist(itemName);
@@ -865,10 +874,6 @@ void Store::viewItems(int whoIs)//for the customer to view the inventory of the 
         menu(whoIs);
     }
 }
-void Store::requestOrder()
-{
-
-}//this is used to ask the manager to order a item if you cant find it
 void Store::quit()
 {
     ofstream updateDays("day.txt");

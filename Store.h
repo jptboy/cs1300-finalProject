@@ -8,7 +8,7 @@ using namespace std;
 struct orderSchedule
 {
     int dayTillOrder;
-    int itemQuantity;
+    int itemQuantity;//this is the struct for a order that has the date the item it was ordered and when it will come with other info about the item
     int currDay;
     string itemType;
     int itemPos;
@@ -28,13 +28,10 @@ class Store
         void buyItem(int whoIs,int errorNuller);
         void searchItems(int whoIs,int errorNuller);
         void addItemtoFavorite();
-        void shopLift();
         void quit();
         void viewBalance(int whoIs);
         void getReccomendations(int whoIs);
-        void requestOrder();
         void viewItems(int whoIs);
-        void addNewCustomer();
         int createOrder(string itemType, int itemPos);
         bool doesItemExist(string whatItem);
         int whereDoesItemExist(string whatItem);
@@ -46,7 +43,6 @@ class Store
         void setCustFavs(string itemName, int whoIs);
         string getItemType(string itemName);
         void viewFavorites(int whoIs);
-        void viewFavoritesHelper(string arr[]);
         int finderForItemQuantity(string itemName);
         void loadOrders();
         string findObject(string itemType, int itemPos);
